@@ -26,11 +26,19 @@ async function run() {
    
     // show all products of inventory
     app.get('/products' , async(req, res)=>{
-      console.log('getting all products');
+      // console.log('getting all products');
       const cursor =products_collection.find({});
       const result =  await cursor.toArray();
       res.send(result);
     })
+
+    //show random 6 items from products collection
+    app.get('/homepageproducts', async(req, res)=>{
+      const cursor = products_collection.aggregate([{ $sample: { size: 6 } }]);
+      const result =  await cursor.toArray();
+      res.send(result);
+    })
+
     // show all blogs
     app.get('/blogs' , async(req, res)=>{
       // console.log('getting all blogs');
