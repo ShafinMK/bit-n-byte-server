@@ -47,6 +47,14 @@ async function run() {
       res.send(result);
     })
 
+    //show random 3 blogs
+    app.get('/randomblogs' , async(req, res)=>{
+      // console.log('getting all blogs');
+      const cursor =blogs_collection.aggregate([{ $sample: { size: 3 } }]);
+      const result =  await cursor.toArray();
+      res.send(result);
+    })
+
     //find a product
     app.get('/products/:productID', async(req, res)=>{
       // console.log('getting one product');
