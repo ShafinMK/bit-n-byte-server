@@ -17,18 +17,18 @@ app.use(express.json())
 
 function verifyJWT(req, res, next) {
   const authHeader = req.headers.authorization;
-  if(!authHeader){
-    return res.status(401).send({message: 'Unauthorized Access'});
+  if (!authHeader) {
+    return res.status(401).send({ message: 'Unauthorized Access' });
   }
   const token = authHeader.split(' ')[1];
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded)=>{
-    if(err){
-      return res.status(403).send({message: 'Forbidden Access'})
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(403).send({ message: 'Forbidden Access' })
     }
     console.log('decoded', decoded);
     req.decoded = decoded;
   })
-  
+
   next();
 }
 
@@ -60,6 +60,17 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     })
+
+    // show searched products from inventory
+    app.get('/searchedproducts', async (req, res) => {
+      // console.log('getting all products');
+      const cursor = products_collection.find({ "itemName": /Motherboard/ });
+      const result = await cursor.toArray();
+      res.send(result);
+    })
+
+    
+
 
     //show random 6 items from products collection
     app.get('/homepageproducts', async (req, res) => {
@@ -98,16 +109,16 @@ async function run() {
     app.get('/vendorsproduct', verifyJWT, async (req, res) => {
       const email = req.query.vendoremail;
       const decodedEmail = req.decoded.email;
-      if(email === decodedEmail){
+      if (email === decodedEmail) {
         const query = { vendorEmail: email };
         const cursor = products_collection.find(query);
         const result = await cursor.toArray();
         res.send(result);
       }
-      else{
-        res.status(403).send({message: 'forbidden access'});
+      else {
+        res.status(403).send({ message: 'forbidden access' });
       }
-      
+
     })
 
     // find stock out items 
