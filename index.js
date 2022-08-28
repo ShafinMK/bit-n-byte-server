@@ -7,6 +7,7 @@ require('dotenv').config()
 var jwt = require('jsonwebtoken');
 
 //db user name and pass
+
 //un: shafin
 //upass: D9rLmZHnXxYNKbK3
 
@@ -69,7 +70,7 @@ async function run() {
       res.send(result);
     })
 
-    
+
 
 
     //show random 6 items from products collection
