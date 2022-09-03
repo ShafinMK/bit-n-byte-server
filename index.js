@@ -13,8 +13,8 @@ var jwt = require('jsonwebtoken');
 
 
 //middleware 
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
 
 function verifyJWT(req, res, next) {
   const authHeader = req.headers.authorization;
@@ -84,8 +84,24 @@ async function run() {
     app.get('/blogs', async (req, res) => {
       // console.log('getting all blogs');
       const cursor = blogs_collection.find({});
-      const result = await cursor.toArray();
-      res.send(result);
+      const page = parseInt(req.query.page);
+      const size = parseInt(req.query.size);
+      let blogs;
+      if(page || size){
+        blogs = await cursor.skip(page*size).limit(size).toArray();
+      }
+      else{
+        blogs = await cursor.toArray();
+      }
+      // const result = await cursor.toArray();
+      res.send(blogs);
+    })
+
+    //get blogs count
+    app.get('/blogscount', async(req, res)=>{
+      
+      const count = await blogs_collection.estimatedDocumentCount();
+      res.send({count});
     })
 
     //show random 3 blogs
