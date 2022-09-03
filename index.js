@@ -52,7 +52,7 @@ async function run() {
       const user = req.body;
       // console.log(user);
       const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: '1d'
+        expiresIn: '365d'
       });
       res.send({ accessToken });
     })
