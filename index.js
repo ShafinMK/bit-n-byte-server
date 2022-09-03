@@ -15,7 +15,7 @@ var jwt = require('jsonwebtoken');
 //middleware 
 app.use(cors());
 app.use(express.json({
-  origin: 'https://bit-n-byte.web.app/'
+  origin: 'https://bit-n-byte.web.app'
 }));
 
 function verifyJWT(req, res, next) {
